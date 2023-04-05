@@ -14,24 +14,37 @@ jobs:
     steps:
       - name: Compute next SemVer tag
         id: semver
-        uses: K-Phoen/semver-release-action@master
+        uses: happydemics/semver-release-action@master
         with:
           release_branch: master
           release_strategy: none
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.base_ref }}
 
-      - run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u kphoen --password-stdin
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Push docker image
-        run: make push
+      - name: Build, tag, and push the image to Amazon ECR
+        id: build-image
         env:
-          VERSION: ${{ steps.semver.outputs.tag }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: happydemics/dashboard
+          IMAGE_TAG: ${{ inputs.CI_ACTION_REF_NAME_SLUG_SHORT }}
+          DOCKER_BUILDKIT: 1
+        run: |
+          # Build a docker container and push it to ECR
+          docker build --no-cache -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+
+          echo "Pushing image to ECR..."
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - run: make update_action
         env:
@@ -44,9 +57,9 @@ jobs:
 
       - name: Create release
         id: tag
-        uses: K-Phoen/semver-release-action@master
+        uses: happydemics/semver-release-action@master
         with:
           release_branch: master
           tag: ${{ steps.semver.outputs.tag }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

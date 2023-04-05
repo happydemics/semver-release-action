@@ -33,6 +33,7 @@ jobs:
       - name: Build, tag, and push the image to Amazon ECR
         id: build-image
         env:
+          VERSION: ${{ steps.semver.outputs.tag }}
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: happydemics/dashboard
           IMAGE_TAG: ${{ inputs.CI_ACTION_REF_NAME_SLUG_SHORT }}

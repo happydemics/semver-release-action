@@ -1,4 +1,4 @@
-module github.com/K-Phoen/semver-release-action
+module github.com/happydemics/semver-release-action
 
 go 1.18
 

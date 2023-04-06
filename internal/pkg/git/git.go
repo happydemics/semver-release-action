@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/K-Phoen/semver-release-action/internal/pkg/action"
+	"github.com/happydemics/semver-release-action/internal/pkg/action"
 	"github.com/blang/semver/v4"
 	"github.com/google/go-github/v45/github"
 	"github.com/spf13/cobra"

@@ -32,11 +32,7 @@ outputs:
 
 runs:
   using: 'docker'
-<<<<<<< Updated upstream
-  image: 'docker://happydemics/semver-release-action@$IMAGE_TAG'
-=======
   image: 'docker://ghcr.io/happydemics/semver-release-action:1.0.0'
->>>>>>> Stashed changes
   args:
     - ${{ inputs.release_branch }}
     - ${{ inputs.release_strategy }}

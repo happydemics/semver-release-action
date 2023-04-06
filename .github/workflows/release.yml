@@ -12,11 +12,7 @@ jobs:
     steps:
       - name: Compute next SemVer tag
         id: semver
-<<<<<<< Updated upstream
         uses: happydemics/semver-release-action@master
-=======
-        uses: happydemics/semver-release-action@master 
->>>>>>> Stashed changes
         with:
           release_branch: master
           release_strategy: none
@@ -27,8 +23,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.base_ref }}
-
-<<<<<<< Updated upstream
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
@@ -52,8 +46,6 @@ jobs:
 
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-=======
->>>>>>> Stashed changes
       - run: make update_action
         env:
           VERSION: ${{ steps.semver.outputs.tag }}

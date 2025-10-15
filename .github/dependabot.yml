@@ -1,0 +1,25 @@
+version: 2
+updates:
+  - package-ecosystem: "go"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+    commit-message:
+      prefix: "[DEPENDABOT] "
+    groups:
+      security:
+        applies-to: "security-updates"
+      all-other-updates:
+        applies-to: "version-updates"
+        patterns:
+          - "*"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"

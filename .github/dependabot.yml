@@ -11,7 +11,6 @@ updates:
     groups:
       security:
         applies-to: "security-updates"
-        dependency-type: "production"
       all-other-updates:
         applies-to: "version-updates"
         patterns:
